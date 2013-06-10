@@ -1,0 +1,3 @@
+pgzn_mobile_app_backend_homepage:
+    pattern:  /
+    defaults: { _controller: PGZNMobileAppBackendBundle:Default:index }

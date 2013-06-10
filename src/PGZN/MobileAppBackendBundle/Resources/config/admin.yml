@@ -1,0 +1,6 @@
+services:
+    PGZNAppsAdmin:
+        class: PGZN\MobileAppBackendBundle\Admin\AppsAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Apps, label: "Apps" }
+        arguments: [null, PGZN\MobileAppBackendBundle\Entity\Apps, "SonataAdminBundle:CRUD"]
