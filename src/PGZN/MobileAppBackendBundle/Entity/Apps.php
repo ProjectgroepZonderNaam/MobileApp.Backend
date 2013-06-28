@@ -49,8 +49,28 @@ class Apps
      */
     private $link;
 
+        /**
+     * @var string
+     *
+     * @ORM\Column(name="IconUrl", type="string", length=255, nullable=false)
+     */
+    private $iconurl;
+    
+    
+        /**
+     * @var int
+     *
+     * @ORM\Column(name="Rating", type="integer", nullable=false)
+     */
+    private $rating;
 
-
+            /**
+     * @var boolean
+     *
+     * @ORM\Column(name="Featured", type="boolean", nullable=false)
+     */
+    private $featured;
+    
     /**
      * Get id
      *
@@ -110,7 +130,7 @@ class Apps
     /**
      * Set price
      *
-     * @param float $price
+        * @param float $price
      * @return Apps
      */
     public function setPrice($price)
@@ -151,5 +171,76 @@ class Apps
     public function getLink()
     {
         return $this->link;
+    }
+    
+    
+        /**
+     * Set iconurl
+     *
+     * @param string $url
+     * @return Apps
+     */
+    public function setIconurl($url)
+    {
+        $this->iconurl = $url;
+    
+        return $this;
+    }
+
+    /**
+     * Get iconurl
+     *
+     * @return string 
+     */
+    public function getIconurl()
+    {
+        return $this->iconurl;
+    }
+    
+    
+        /**
+     * Set rating
+     *
+     * @param integer $rating
+     * @return Apps
+     */
+    public function setRating($rating)
+    {
+        $this->rating = $rating;
+    
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @return integer 
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
+    
+            /**
+     * Set rating
+     *
+     * @param boolean $feutured
+     * @return Apps
+     */
+    public function setFeatured($featured)
+    {
+        $this->featured = $featured;
+    
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @return boolean 
+     */
+    public function getFeatured()
+    {
+        return $this->featured;
     }
 }

@@ -18,5 +18,11 @@ sonata_user:
 apps:
     type:     rest
     resource: PGZN\MobileAppBackendBundle\Controller\AppController
+    prefix: /api 
     
+    
+charities:
+    type:     rest
+    resource: PGZN\MobileAppBackendBundle\Controller\CharitiesController
+    prefix: /api    
     

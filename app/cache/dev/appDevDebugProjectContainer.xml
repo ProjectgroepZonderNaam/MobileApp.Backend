@@ -362,6 +362,12 @@
     <parameter key="monolog.handler.fingers_crossed.class">Monolog\Handler\FingersCrossedHandler</parameter>
     <parameter key="monolog.handler.fingers_crossed.error_level_activation_strategy.class">Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy</parameter>
     <parameter key="monolog.handlers_to_channels" type="collection">
+      <parameter key="monolog.handler.wsse" type="collection">
+        <parameter key="type">inclusive</parameter>
+        <parameter key="elements" type="collection">
+          <parameter>wsse</parameter>
+        </parameter>
+      </parameter>
       <parameter key="monolog.handler.chromephp">null</parameter>
       <parameter key="monolog.handler.firephp">null</parameter>
       <parameter key="monolog.handler.main">null</parameter>
@@ -651,6 +657,7 @@
     </parameter>
     <parameter key="simplethings.entityaudit.audited_entities" type="collection">
       <parameter>PGZN\MobileAppBackendBundle\Entity\Apps</parameter>
+      <parameter>PGZN\MobileAppBackendBundle\Entity\Charities</parameter>
       <parameter>Application\Sonata\UserBundle\Entity\User</parameter>
       <parameter>Application\Sonata\UserBundle\Entity\Group</parameter>
     </parameter>
@@ -980,6 +987,123 @@
           <argument>SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig</argument>
         </argument>
       </call>
+    </service>
+    <service id="pgzncharitiesadmin" class="PGZN\MobileAppBackendBundle\Admin\CharitiesAdmin" scope="prototype">
+      <tag name="sonata.admin" manager_type="orm" group="Charities" label="Charities"/>
+      <argument>pgzncharitiesadmin</argument>
+      <argument>PGZN\MobileAppBackendBundle\Entity\Charities</argument>
+      <argument>SonataAdminBundle:CRUD</argument>
+      <call method="setManagerType">
+        <argument>orm</argument>
+      </call>
+      <call method="setModelManager">
+        <argument type="service" id="sonata.admin.manager.orm"/>
+      </call>
+      <call method="setFormContractor">
+        <argument type="service" id="sonata.admin.builder.orm_form"/>
+      </call>
+      <call method="setShowBuilder">
+        <argument type="service" id="sonata.admin.builder.orm_show"/>
+      </call>
+      <call method="setListBuilder">
+        <argument type="service" id="sonata.admin.builder.orm_list"/>
+      </call>
+      <call method="setDatagridBuilder">
+        <argument type="service" id="sonata.admin.builder.orm_datagrid"/>
+      </call>
+      <call method="setTranslator">
+        <argument type="service" id="translator.default"/>
+      </call>
+      <call method="setConfigurationPool">
+        <argument type="service" id="sonata.admin.pool"/>
+      </call>
+      <call method="setRouteGenerator">
+        <argument type="service" id="sonata.admin.route.default_generator"/>
+      </call>
+      <call method="setValidator">
+        <argument type="service" id="validator"/>
+      </call>
+      <call method="setSecurityHandler">
+        <argument type="service" id="sonata.admin.security.handler"/>
+      </call>
+      <call method="setMenuFactory">
+        <argument type="service" id="knp_menu.factory"/>
+      </call>
+      <call method="setRouteBuilder">
+        <argument type="service" id="sonata.admin.route.path_info"/>
+      </call>
+      <call method="setLabelTranslatorStrategy">
+        <argument type="service" id="sonata.admin.label.strategy.native"/>
+      </call>
+      <call method="setLabel">
+        <argument>Charities</argument>
+      </call>
+      <call method="setPersistFilters">
+        <argument>false</argument>
+      </call>
+      <call method="setTemplates">
+        <argument type="collection">
+          <argument key="user_block">SonataUserBundle:Admin/Core:user_block.html.twig</argument>
+          <argument key="layout">SonataAdminBundle::standard_layout.html.twig</argument>
+          <argument key="ajax">SonataAdminBundle::ajax_layout.html.twig</argument>
+          <argument key="dashboard">SonataAdminBundle:Core:dashboard.html.twig</argument>
+          <argument key="list">SonataAdminBundle:CRUD:list.html.twig</argument>
+          <argument key="show">SonataAdminBundle:CRUD:show.html.twig</argument>
+          <argument key="edit">SonataAdminBundle:CRUD:edit.html.twig</argument>
+          <argument key="history">SonataAdminBundle:CRUD:history.html.twig</argument>
+          <argument key="history_revision">SonataAdminBundle:CRUD:history_revision.html.twig</argument>
+          <argument key="action">SonataAdminBundle:CRUD:action.html.twig</argument>
+          <argument key="short_object_description">SonataAdminBundle:Helper:short-object-description.html.twig</argument>
+          <argument key="preview">SonataAdminBundle:CRUD:preview.html.twig</argument>
+          <argument key="list_block">SonataAdminBundle:Block:block_admin_list.html.twig</argument>
+          <argument key="delete">SonataAdminBundle:CRUD:delete.html.twig</argument>
+          <argument key="batch">SonataAdminBundle:CRUD:list__batch.html.twig</argument>
+          <argument key="batch_confirmation">SonataAdminBundle:CRUD:batch_confirmation.html.twig</argument>
+          <argument key="inner_list_row">SonataAdminBundle:CRUD:list_inner_row.html.twig</argument>
+          <argument key="base_list_field">SonataAdminBundle:CRUD:base_list_field.html.twig</argument>
+        </argument>
+      </call>
+      <call method="setSecurityInformation">
+        <argument type="collection">
+          <argument key="GUEST" type="collection">
+            <argument>VIEW</argument>
+            <argument>LIST</argument>
+          </argument>
+          <argument key="STAFF" type="collection">
+            <argument>EDIT</argument>
+            <argument>LIST</argument>
+            <argument>CREATE</argument>
+          </argument>
+          <argument key="EDITOR" type="collection">
+            <argument>OPERATOR</argument>
+            <argument>EXPORT</argument>
+          </argument>
+          <argument key="ADMIN" type="collection">
+            <argument>MASTER</argument>
+          </argument>
+        </argument>
+      </call>
+      <call method="initialize"/>
+      <call method="setFormTheme">
+        <argument type="collection">
+          <argument>SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig</argument>
+        </argument>
+      </call>
+      <call method="setFilterTheme">
+        <argument type="collection">
+          <argument>SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig</argument>
+        </argument>
+      </call>
+    </service>
+    <service id="wsse.security.authentication.provider" class="PGZN\MobileAppBackendBundle\Security\Authentication\Provider\WsseProvider">
+      <argument></argument>
+      <argument>D:/Projects/MobileApp.Backend/app/cache/dev/security/nonces</argument>
+    </service>
+    <service id="wsse.security.authentication.listener" class="PGZN\MobileAppBackendBundle\Security\Authentication\Firewall\WsseListener">
+      <tag name="monolog.logger" channel="wsse"/>
+      <argument type="service" id="security.context"/>
+      <argument type="service" id="security.authentication.manager"/>
+      <argument type="service" id="monolog.logger.wsse"/>
     </service>
     <service id="controller_name_converter" class="Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser" public="false">
       <tag name="monolog.logger" channel="request"/>
@@ -3322,6 +3446,12 @@
     </service>
     <service id="security.authentication.manager" class="Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager" public="false">
       <argument type="collection">
+        <argument type="service" id="security.authentication.provider.wsse.wsse_secured"/>
+        <argument type="service">
+          <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
+            <argument>51cd6ee10718e</argument>
+          </service>
+        </argument>
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider" public="false">
             <argument type="service" id="fos_user.user_manager"/>
@@ -3333,7 +3463,7 @@
         </argument>
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>51b5e4988974b</argument>
+            <argument>51cd6ee10718e</argument>
           </service>
         </argument>
         <argument type="service">
@@ -3347,7 +3477,7 @@
         </argument>
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>51b5e4988974b</argument>
+            <argument>51cd6ee10718e</argument>
           </service>
         </argument>
       </argument>
@@ -3478,6 +3608,11 @@
         <service class="Symfony\Bundle\SecurityBundle\Security\FirewallMap" public="false">
           <argument type="service" id="service_container"/>
           <argument type="collection">
+            <argument key="security.firewall.map.context.wsse_secured" type="service">
+              <service class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
+                <argument>/api/.*</argument>
+              </service>
+            </argument>
             <argument key="security.firewall.map.context.admin" type="service">
               <service class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
                 <argument>/admin(.*)</argument>
@@ -3666,6 +3801,41 @@
       <tag name="templating.helper" alias="security"/>
       <argument type="service" id="security.context" on-invalid="ignore"/>
     </service>
+    <service id="security.authentication.provider.wsse.wsse_secured" class="PGZN\MobileAppBackendBundle\Security\Authentication\Provider\WsseProvider">
+      <argument type="service" id="fos_user.user_manager"/>
+      <argument>D:/Projects/MobileApp.Backend/app/cache/dev/security/nonces</argument>
+    </service>
+    <service id="security.authentication.listener.wsse.wsse_secured" class="PGZN\MobileAppBackendBundle\Security\Authentication\Firewall\WsseListener">
+      <argument type="service" id="security.context"/>
+      <argument type="service" id="security.authentication.manager"/>
+      <argument type="service" id="monolog.logger.wsse"/>
+    </service>
+    <service id="security.firewall.map.context.wsse_secured" class="Symfony\Bundle\SecurityBundle\Security\FirewallContext">
+      <argument type="collection">
+        <argument type="service" id="security.channel_listener"/>
+        <argument type="service" id="security.authentication.listener.wsse.wsse_secured"/>
+        <argument type="service">
+          <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
+            <argument type="service" id="security.context"/>
+            <argument>51cd6ee10718e</argument>
+            <argument type="service" id="monolog.logger.security" on-invalid="null"/>
+          </service>
+        </argument>
+        <argument type="service" id="security.access_listener"/>
+      </argument>
+      <argument type="service">
+        <service class="Symfony\Component\Security\Http\Firewall\ExceptionListener" public="false">
+          <argument type="service" id="security.context"/>
+          <argument type="service" id="security.authentication.trust_resolver"/>
+          <argument type="service" id="security.http_utils"/>
+          <argument>wsse_secured</argument>
+          <argument>null</argument>
+          <argument>null</argument>
+          <argument>null</argument>
+          <argument type="service" id="monolog.logger.security" on-invalid="null"/>
+        </service>
+      </argument>
+    </service>
     <service id="security.context_listener.0" class="Symfony\Component\Security\Http\Firewall\ContextListener" public="false">
       <argument type="service" id="security.context"/>
       <argument type="collection">
@@ -3752,7 +3922,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.context"/>
-            <argument>51b5e4988974b</argument>
+            <argument>51cd6ee10718e</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
           </service>
         </argument>
@@ -3868,7 +4038,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.context"/>
-            <argument>51b5e4988974b</argument>
+            <argument>51cd6ee10718e</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
           </service>
         </argument>
@@ -4136,6 +4306,11 @@
     <service id="monolog.handler.chromephp" class="Symfony\Bridge\Monolog\Handler\ChromePhpHandler">
       <tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse"/>
       <argument>200</argument>
+      <argument>true</argument>
+    </service>
+    <service id="monolog.handler.wsse" class="Monolog\Handler\StreamHandler">
+      <argument>D:/Projects/MobileApp.Backend/app/logs/dev.wsse.log</argument>
+      <argument>400</argument>
       <argument>true</argument>
     </service>
     <service id="swiftmailer.transport.eventdispatcher" class="Swift_Events_SimpleEventDispatcher" public="false"/>
@@ -4630,6 +4805,7 @@
       <call method="setAdminServiceIds">
         <argument type="collection">
           <argument>pgznappsadmin</argument>
+          <argument>pgzncharitiesadmin</argument>
           <argument>sonata.user.admin.user</argument>
           <argument>sonata.user.admin.group</argument>
         </argument>
@@ -4641,6 +4817,13 @@
             <argument key="label_catalogue">SonataAdminBundle</argument>
             <argument key="items" type="collection">
               <argument>pgznappsadmin</argument>
+            </argument>
+          </argument>
+          <argument key="Charities" type="collection">
+            <argument key="label">Charities</argument>
+            <argument key="label_catalogue">SonataAdminBundle</argument>
+            <argument key="items" type="collection">
+              <argument>pgzncharitiesadmin</argument>
             </argument>
           </argument>
           <argument key="sonata_user" type="collection">
@@ -4656,6 +4839,7 @@
       <call method="setAdminClasses">
         <argument type="collection">
           <argument key="PGZN\MobileAppBackendBundle\Entity\Apps">pgznappsadmin</argument>
+          <argument key="PGZN\MobileAppBackendBundle\Entity\Charities">pgzncharitiesadmin</argument>
           <argument key="Application\Sonata\UserBundle\Entity\User">sonata.user.admin.user</argument>
           <argument key="Application\Sonata\UserBundle\Entity\Group">sonata.user.admin.group</argument>
         </argument>
@@ -4666,6 +4850,7 @@
       <argument type="service" id="sonata.admin.pool"/>
       <argument type="collection">
         <argument>pgznappsadmin</argument>
+        <argument>pgzncharitiesadmin</argument>
         <argument>sonata.user.admin.user</argument>
         <argument>sonata.user.admin.group</argument>
       </argument>
@@ -4707,6 +4892,7 @@
         <argument>sonata.admin.audit.orm.reader</argument>
         <argument type="collection">
           <argument>PGZN\MobileAppBackendBundle\Entity\Apps</argument>
+          <argument>PGZN\MobileAppBackendBundle\Entity\Charities</argument>
           <argument>Application\Sonata\UserBundle\Entity\User</argument>
           <argument>Application\Sonata\UserBundle\Entity\Group</argument>
         </argument>
@@ -4950,6 +5136,7 @@
       <call method="setAuditedEntityClasses">
         <argument type="collection">
           <argument>PGZN\MobileAppBackendBundle\Entity\Apps</argument>
+          <argument>PGZN\MobileAppBackendBundle\Entity\Charities</argument>
           <argument>Application\Sonata\UserBundle\Entity\User</argument>
           <argument>Application\Sonata\UserBundle\Entity\Group</argument>
         </argument>
@@ -5818,6 +6005,24 @@
     </service>
     <service id="sensio.distribution.webconfigurator" class="Sensio\Bundle\DistributionBundle\Configurator\Configurator">
       <argument>D:/Projects/MobileApp.Backend/app</argument>
+    </service>
+    <service id="monolog.logger.wsse" class="Symfony\Bridge\Monolog\Logger">
+      <argument>wsse</argument>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.wsse"/>
+      </call>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.chromephp"/>
+      </call>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.firephp"/>
+      </call>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.main"/>
+      </call>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.debug"/>
+      </call>
     </service>
     <service id="monolog.logger.request" class="Symfony\Bridge\Monolog\Logger">
       <argument>request</argument>

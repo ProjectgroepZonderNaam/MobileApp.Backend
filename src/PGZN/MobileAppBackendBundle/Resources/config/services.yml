@@ -1,1 +1,10 @@
+services:
+    wsse.security.authentication.provider:
+        class:  PGZN\MobileAppBackendBundle\Security\Authentication\Provider\WsseProvider
+        arguments: ["", "%kernel.cache_dir%/security/nonces"]
 
+    wsse.security.authentication.listener:
+        class:  PGZN\MobileAppBackendBundle\Security\Authentication\Firewall\WsseListener
+        arguments: ["@security.context", "@security.authentication.manager","@logger"]
+        tags:
+            - { name: monolog.logger, channel: wsse }

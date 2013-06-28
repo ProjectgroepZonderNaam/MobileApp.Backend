@@ -63,4 +63,6 @@ class MessageDigestPasswordEncoder extends BasePasswordEncoder
     {
         return $this->comparePasswords($encoded, $this->encodePassword($raw, $salt));
     }
+    
+    
 }

@@ -23,6 +23,11 @@ monolog:
         chromephp:
             type:  chromephp
             level: info
+        wsse:
+            type: stream
+            path: %kernel.logs_dir%/%kernel.environment%.wsse.log
+            level: error
+            channels: [wsse]   
 
 assetic:
     use_controller: true

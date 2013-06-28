@@ -16,6 +16,9 @@ class AppsAdmin extends Admin {
             ->add('description')
             ->add('price')
             ->add('link')
+            ->add('iconurl')
+            ->add('rating')
+            ->add('featured')
         ;
     }
 

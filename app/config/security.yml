@@ -13,7 +13,12 @@ security:
             id: fos_user.user_manager
 
     firewalls:
-        # -> custom firewall for the admin area of the URL
+        wsse_secured:
+            pattern:   /api/.*
+            stateless:    true
+            wsse: true
+            anonymous : true
+          
         admin:
             switch_user:        true
             context:            user
@@ -69,3 +74,4 @@ security:
         
     acl:
         connection: default    
+        

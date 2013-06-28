@@ -184,6 +184,7 @@ class appDevDebugProjectContainer extends Container
             'monolog.handler.debug' => 'getMonolog_Handler_DebugService',
             'monolog.handler.firephp' => 'getMonolog_Handler_FirephpService',
             'monolog.handler.main' => 'getMonolog_Handler_MainService',
+            'monolog.handler.wsse' => 'getMonolog_Handler_WsseService',
             'monolog.logger.deprecation' => 'getMonolog_Logger_DeprecationService',
             'monolog.logger.doctrine' => 'getMonolog_Logger_DoctrineService',
             'monolog.logger.emergency' => 'getMonolog_Logger_EmergencyService',
@@ -193,7 +194,9 @@ class appDevDebugProjectContainer extends Container
             'monolog.logger.router' => 'getMonolog_Logger_RouterService',
             'monolog.logger.security' => 'getMonolog_Logger_SecurityService',
             'monolog.logger.templating' => 'getMonolog_Logger_TemplatingService',
+            'monolog.logger.wsse' => 'getMonolog_Logger_WsseService',
             'pgznappsadmin' => 'getPgznappsadminService',
+            'pgzncharitiesadmin' => 'getPgzncharitiesadminService',
             'profiler' => 'getProfilerService',
             'profiler_listener' => 'getProfilerListenerService',
             'property_accessor' => 'getPropertyAccessorService',
@@ -209,7 +212,9 @@ class appDevDebugProjectContainer extends Container
             'security.acl.dbal.schema' => 'getSecurity_Acl_Dbal_SchemaService',
             'security.acl.dbal.schema_listener' => 'getSecurity_Acl_Dbal_SchemaListenerService',
             'security.acl.provider' => 'getSecurity_Acl_ProviderService',
+            'security.authentication.listener.wsse.wsse_secured' => 'getSecurity_Authentication_Listener_Wsse_WsseSecuredService',
             'security.authentication.manager' => 'getSecurity_Authentication_ManagerService',
+            'security.authentication.provider.wsse.wsse_secured' => 'getSecurity_Authentication_Provider_Wsse_WsseSecuredService',
             'security.authentication.session_strategy' => 'getSecurity_Authentication_SessionStrategyService',
             'security.authentication.trust_resolver' => 'getSecurity_Authentication_TrustResolverService',
             'security.channel_listener' => 'getSecurity_ChannelListenerService',
@@ -219,6 +224,7 @@ class appDevDebugProjectContainer extends Container
             'security.firewall' => 'getSecurity_FirewallService',
             'security.firewall.map.context.admin' => 'getSecurity_Firewall_Map_Context_AdminService',
             'security.firewall.map.context.main' => 'getSecurity_Firewall_Map_Context_MainService',
+            'security.firewall.map.context.wsse_secured' => 'getSecurity_Firewall_Map_Context_WsseSecuredService',
             'security.http_utils' => 'getSecurity_HttpUtilsService',
             'security.logout.handler.session' => 'getSecurity_Logout_Handler_SessionService',
             'security.rememberme.response_listener' => 'getSecurity_Rememberme_ResponseListenerService',
@@ -400,6 +406,8 @@ class appDevDebugProjectContainer extends Container
             'web_profiler.controller.profiler' => 'getWebProfiler_Controller_ProfilerService',
             'web_profiler.controller.router' => 'getWebProfiler_Controller_RouterService',
             'web_profiler.debug_toolbar' => 'getWebProfiler_DebugToolbarService',
+            'wsse.security.authentication.listener' => 'getWsse_Security_Authentication_ListenerService',
+            'wsse.security.authentication.provider' => 'getWsse_Security_Authentication_ProviderService',
             'database_connection' => 'getDoctrine_Dbal_DefaultConnectionService',
             'debug.templating.engine.twig' => 'getTemplatingService',
             'doctrine.orm.entity_manager' => 'getDoctrine_Orm_DefaultEntityManagerService',
@@ -2464,6 +2472,19 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'monolog.handler.wsse' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Monolog\Handler\StreamHandler A Monolog\Handler\StreamHandler instance.
+     */
+    protected function getMonolog_Handler_WsseService()
+    {
+        return $this->services['monolog.handler.wsse'] = new \Monolog\Handler\StreamHandler('D:/Projects/MobileApp.Backend/app/logs/dev.wsse.log', 400, true);
+    }
+
+    /**
      * Gets the 'monolog.logger.deprecation' service.
      *
      * This service is shared.
@@ -2644,6 +2665,27 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'monolog.logger.wsse' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Symfony\Bridge\Monolog\Logger A Symfony\Bridge\Monolog\Logger instance.
+     */
+    protected function getMonolog_Logger_WsseService()
+    {
+        $this->services['monolog.logger.wsse'] = $instance = new \Symfony\Bridge\Monolog\Logger('wsse');
+
+        $instance->pushHandler($this->get('monolog.handler.wsse'));
+        $instance->pushHandler($this->get('monolog.handler.chromephp'));
+        $instance->pushHandler($this->get('monolog.handler.firephp'));
+        $instance->pushHandler($this->get('monolog.handler.main'));
+        $instance->pushHandler($this->get('monolog.handler.debug'));
+
+        return $instance;
+    }
+
+    /**
      * Gets the 'pgznappsadmin' service.
      *
      * @return PGZN\MobileAppBackendBundle\Admin\AppsAdmin A PGZN\MobileAppBackendBundle\Admin\AppsAdmin instance.
@@ -2667,6 +2709,40 @@ class appDevDebugProjectContainer extends Container
         $instance->setRouteBuilder($this->get('sonata.admin.route.path_info'));
         $instance->setLabelTranslatorStrategy($this->get('sonata.admin.label.strategy.native'));
         $instance->setLabel('Apps');
+        $instance->setPersistFilters(false);
+        $instance->setTemplates(array('user_block' => 'SonataUserBundle:Admin/Core:user_block.html.twig', 'layout' => 'SonataAdminBundle::standard_layout.html.twig', 'ajax' => 'SonataAdminBundle::ajax_layout.html.twig', 'dashboard' => 'SonataAdminBundle:Core:dashboard.html.twig', 'list' => 'SonataAdminBundle:CRUD:list.html.twig', 'show' => 'SonataAdminBundle:CRUD:show.html.twig', 'edit' => 'SonataAdminBundle:CRUD:edit.html.twig', 'history' => 'SonataAdminBundle:CRUD:history.html.twig', 'history_revision' => 'SonataAdminBundle:CRUD:history_revision.html.twig', 'action' => 'SonataAdminBundle:CRUD:action.html.twig', 'short_object_description' => 'SonataAdminBundle:Helper:short-object-description.html.twig', 'preview' => 'SonataAdminBundle:CRUD:preview.html.twig', 'list_block' => 'SonataAdminBundle:Block:block_admin_list.html.twig', 'delete' => 'SonataAdminBundle:CRUD:delete.html.twig', 'batch' => 'SonataAdminBundle:CRUD:list__batch.html.twig', 'batch_confirmation' => 'SonataAdminBundle:CRUD:batch_confirmation.html.twig', 'inner_list_row' => 'SonataAdminBundle:CRUD:list_inner_row.html.twig', 'base_list_field' => 'SonataAdminBundle:CRUD:base_list_field.html.twig'));
+        $instance->setSecurityInformation(array('GUEST' => array(0 => 'VIEW', 1 => 'LIST'), 'STAFF' => array(0 => 'EDIT', 1 => 'LIST', 2 => 'CREATE'), 'EDITOR' => array(0 => 'OPERATOR', 1 => 'EXPORT'), 'ADMIN' => array(0 => 'MASTER')));
+        $instance->initialize();
+        $instance->setFormTheme(array(0 => 'SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig'));
+        $instance->setFilterTheme(array(0 => 'SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig'));
+
+        return $instance;
+    }
+
+    /**
+     * Gets the 'pgzncharitiesadmin' service.
+     *
+     * @return PGZN\MobileAppBackendBundle\Admin\CharitiesAdmin A PGZN\MobileAppBackendBundle\Admin\CharitiesAdmin instance.
+     */
+    protected function getPgzncharitiesadminService()
+    {
+        $instance = new \PGZN\MobileAppBackendBundle\Admin\CharitiesAdmin('pgzncharitiesadmin', 'PGZN\\MobileAppBackendBundle\\Entity\\Charities', 'SonataAdminBundle:CRUD');
+
+        $instance->setManagerType('orm');
+        $instance->setModelManager($this->get('sonata.admin.manager.orm'));
+        $instance->setFormContractor($this->get('sonata.admin.builder.orm_form'));
+        $instance->setShowBuilder($this->get('sonata.admin.builder.orm_show'));
+        $instance->setListBuilder($this->get('sonata.admin.builder.orm_list'));
+        $instance->setDatagridBuilder($this->get('sonata.admin.builder.orm_datagrid'));
+        $instance->setTranslator($this->get('translator.default'));
+        $instance->setConfigurationPool($this->get('sonata.admin.pool'));
+        $instance->setRouteGenerator($this->get('sonata.admin.route.default_generator'));
+        $instance->setValidator($this->get('validator'));
+        $instance->setSecurityHandler($this->get('sonata.admin.security.handler'));
+        $instance->setMenuFactory($this->get('knp_menu.factory'));
+        $instance->setRouteBuilder($this->get('sonata.admin.route.path_info'));
+        $instance->setLabelTranslatorStrategy($this->get('sonata.admin.label.strategy.native'));
+        $instance->setLabel('Charities');
         $instance->setPersistFilters(false);
         $instance->setTemplates(array('user_block' => 'SonataUserBundle:Admin/Core:user_block.html.twig', 'layout' => 'SonataAdminBundle::standard_layout.html.twig', 'ajax' => 'SonataAdminBundle::ajax_layout.html.twig', 'dashboard' => 'SonataAdminBundle:Core:dashboard.html.twig', 'list' => 'SonataAdminBundle:CRUD:list.html.twig', 'show' => 'SonataAdminBundle:CRUD:show.html.twig', 'edit' => 'SonataAdminBundle:CRUD:edit.html.twig', 'history' => 'SonataAdminBundle:CRUD:history.html.twig', 'history_revision' => 'SonataAdminBundle:CRUD:history_revision.html.twig', 'action' => 'SonataAdminBundle:CRUD:action.html.twig', 'short_object_description' => 'SonataAdminBundle:Helper:short-object-description.html.twig', 'preview' => 'SonataAdminBundle:CRUD:preview.html.twig', 'list_block' => 'SonataAdminBundle:Block:block_admin_list.html.twig', 'delete' => 'SonataAdminBundle:CRUD:delete.html.twig', 'batch' => 'SonataAdminBundle:CRUD:list__batch.html.twig', 'batch_confirmation' => 'SonataAdminBundle:CRUD:batch_confirmation.html.twig', 'inner_list_row' => 'SonataAdminBundle:CRUD:list_inner_row.html.twig', 'base_list_field' => 'SonataAdminBundle:CRUD:base_list_field.html.twig'));
         $instance->setSecurityInformation(array('GUEST' => array(0 => 'VIEW', 1 => 'LIST'), 'STAFF' => array(0 => 'EDIT', 1 => 'LIST', 2 => 'CREATE'), 'EDITOR' => array(0 => 'OPERATOR', 1 => 'EXPORT'), 'ADMIN' => array(0 => 'MASTER')));
@@ -2874,6 +2950,32 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'security.authentication.listener.wsse.wsse_secured' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return PGZN\MobileAppBackendBundle\Security\Authentication\Firewall\WsseListener A PGZN\MobileAppBackendBundle\Security\Authentication\Firewall\WsseListener instance.
+     */
+    protected function getSecurity_Authentication_Listener_Wsse_WsseSecuredService()
+    {
+        return $this->services['security.authentication.listener.wsse.wsse_secured'] = new \PGZN\MobileAppBackendBundle\Security\Authentication\Firewall\WsseListener($this->get('security.context'), $this->get('security.authentication.manager'), $this->get('monolog.logger.wsse'));
+    }
+
+    /**
+     * Gets the 'security.authentication.provider.wsse.wsse_secured' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return PGZN\MobileAppBackendBundle\Security\Authentication\Provider\WsseProvider A PGZN\MobileAppBackendBundle\Security\Authentication\Provider\WsseProvider instance.
+     */
+    protected function getSecurity_Authentication_Provider_Wsse_WsseSecuredService()
+    {
+        return $this->services['security.authentication.provider.wsse.wsse_secured'] = new \PGZN\MobileAppBackendBundle\Security\Authentication\Provider\WsseProvider($this->get('fos_user.user_manager'), 'D:/Projects/MobileApp.Backend/app/cache/dev/security/nonces');
+    }
+
+    /**
      * Gets the 'security.context' service.
      *
      * This service is shared.
@@ -2909,7 +3011,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSecurity_FirewallService()
     {
-        return $this->services['security.firewall'] = new \Symfony\Component\Security\Http\Firewall(new \Symfony\Bundle\SecurityBundle\Security\FirewallMap($this, array('security.firewall.map.context.admin' => new \Symfony\Component\HttpFoundation\RequestMatcher('/admin(.*)'), 'security.firewall.map.context.main' => new \Symfony\Component\HttpFoundation\RequestMatcher('.*'))), $this->get('event_dispatcher'));
+        return $this->services['security.firewall'] = new \Symfony\Component\Security\Http\Firewall(new \Symfony\Bundle\SecurityBundle\Security\FirewallMap($this, array('security.firewall.map.context.wsse_secured' => new \Symfony\Component\HttpFoundation\RequestMatcher('/api/.*'), 'security.firewall.map.context.admin' => new \Symfony\Component\HttpFoundation\RequestMatcher('/admin(.*)'), 'security.firewall.map.context.main' => new \Symfony\Component\HttpFoundation\RequestMatcher('.*'))), $this->get('event_dispatcher'));
     }
 
     /**
@@ -2934,7 +3036,7 @@ class appDevDebugProjectContainer extends Container
         $g = new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler($a, array('login_path' => '/admin/login', 'use_referer' => true, 'always_use_default_target_path' => false, 'default_target_path' => '/', 'target_path_parameter' => '_target_path'));
         $g->setProviderKey('admin');
 
-        return $this->services['security.firewall.map.context.admin'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => $this->get('security.channel_listener'), 1 => $this->get('security.context_listener.0'), 2 => $f, 3 => new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $this->get('security.authentication.manager'), $this->get('security.authentication.session_strategy'), $a, 'admin', $g, new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($c, $a, array('login_path' => '/admin/login', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'), $d), array('check_path' => '/admin/login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $d, $e), 4 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '51b5e4988974b', $d), 5 => $this->get('security.access_listener'), 6 => new \Symfony\Component\Security\Http\Firewall\SwitchUserListener($b, $this->get('fos_user.user_manager'), $this->get('security.user_checker'), 'admin', $this->get('security.access.decision_manager'), $d, '_switch_user', 'ROLE_ALLOWED_TO_SWITCH', $e)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $a, 'admin', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($c, $a, '/admin/login', false), NULL, NULL, $d));
+        return $this->services['security.firewall.map.context.admin'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => $this->get('security.channel_listener'), 1 => $this->get('security.context_listener.0'), 2 => $f, 3 => new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $this->get('security.authentication.manager'), $this->get('security.authentication.session_strategy'), $a, 'admin', $g, new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($c, $a, array('login_path' => '/admin/login', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'), $d), array('check_path' => '/admin/login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $d, $e), 4 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '51cd6ee10718e', $d), 5 => $this->get('security.access_listener'), 6 => new \Symfony\Component\Security\Http\Firewall\SwitchUserListener($b, $this->get('fos_user.user_manager'), $this->get('security.user_checker'), 'admin', $this->get('security.access.decision_manager'), $d, '_switch_user', 'ROLE_ALLOWED_TO_SWITCH', $e)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $a, 'admin', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($c, $a, '/admin/login', false), NULL, NULL, $d));
     }
 
     /**
@@ -2959,7 +3061,23 @@ class appDevDebugProjectContainer extends Container
         $g = new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler($a, array('login_path' => '/login', 'always_use_default_target_path' => false, 'default_target_path' => '/', 'target_path_parameter' => '_target_path', 'use_referer' => false));
         $g->setProviderKey('main');
 
-        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => $this->get('security.channel_listener'), 1 => $this->get('security.context_listener.0'), 2 => $f, 3 => new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $this->get('security.authentication.manager'), $this->get('security.authentication.session_strategy'), $a, 'main', $g, new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($c, $a, array('login_path' => '/login', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'), $d), array('check_path' => '/login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $d, $e), 4 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '51b5e4988974b', $d), 5 => $this->get('security.access_listener'), 6 => new \Symfony\Component\Security\Http\Firewall\SwitchUserListener($b, $this->get('fos_user.user_manager'), $this->get('security.user_checker'), 'main', $this->get('security.access.decision_manager'), $d, '_switch_user', 'ROLE_ALLOWED_TO_SWITCH', $e)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $a, 'main', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($c, $a, '/login', false), NULL, NULL, $d));
+        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => $this->get('security.channel_listener'), 1 => $this->get('security.context_listener.0'), 2 => $f, 3 => new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $this->get('security.authentication.manager'), $this->get('security.authentication.session_strategy'), $a, 'main', $g, new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($c, $a, array('login_path' => '/login', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'), $d), array('check_path' => '/login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $d, $e), 4 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '51cd6ee10718e', $d), 5 => $this->get('security.access_listener'), 6 => new \Symfony\Component\Security\Http\Firewall\SwitchUserListener($b, $this->get('fos_user.user_manager'), $this->get('security.user_checker'), 'main', $this->get('security.access.decision_manager'), $d, '_switch_user', 'ROLE_ALLOWED_TO_SWITCH', $e)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $a, 'main', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($c, $a, '/login', false), NULL, NULL, $d));
+    }
+
+    /**
+     * Gets the 'security.firewall.map.context.wsse_secured' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Symfony\Bundle\SecurityBundle\Security\FirewallContext A Symfony\Bundle\SecurityBundle\Security\FirewallContext instance.
+     */
+    protected function getSecurity_Firewall_Map_Context_WsseSecuredService()
+    {
+        $a = $this->get('security.context');
+        $b = $this->get('monolog.logger.security', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+
+        return $this->services['security.firewall.map.context.wsse_secured'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => $this->get('security.channel_listener'), 1 => $this->get('security.authentication.listener.wsse.wsse_secured'), 2 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($a, '51cd6ee10718e', $b), 3 => $this->get('security.access_listener')), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($a, $this->get('security.authentication.trust_resolver'), $this->get('security.http_utils'), 'wsse_secured', NULL, NULL, NULL, $b));
     }
 
     /**
@@ -3226,7 +3344,7 @@ class appDevDebugProjectContainer extends Container
     {
         $this->services['simplethings_entityaudit.config'] = $instance = new \SimpleThings\EntityAudit\AuditConfiguration();
 
-        $instance->setAuditedEntityClasses(array(0 => 'PGZN\\MobileAppBackendBundle\\Entity\\Apps', 1 => 'Application\\Sonata\\UserBundle\\Entity\\User', 2 => 'Application\\Sonata\\UserBundle\\Entity\\Group'));
+        $instance->setAuditedEntityClasses(array(0 => 'PGZN\\MobileAppBackendBundle\\Entity\\Apps', 1 => 'PGZN\\MobileAppBackendBundle\\Entity\\Charities', 2 => 'Application\\Sonata\\UserBundle\\Entity\\User', 3 => 'Application\\Sonata\\UserBundle\\Entity\\Group'));
         $instance->setTablePrefix('');
         $instance->setTableSuffix('_audit');
         $instance->setRevisionFieldName('rev');
@@ -3314,7 +3432,7 @@ class appDevDebugProjectContainer extends Container
     {
         $this->services['sonata.admin.audit.manager'] = $instance = new \Sonata\AdminBundle\Model\AuditManager($this);
 
-        $instance->setReader('sonata.admin.audit.orm.reader', array(0 => 'PGZN\\MobileAppBackendBundle\\Entity\\Apps', 1 => 'Application\\Sonata\\UserBundle\\Entity\\User', 2 => 'Application\\Sonata\\UserBundle\\Entity\\Group'));
+        $instance->setReader('sonata.admin.audit.orm.reader', array(0 => 'PGZN\\MobileAppBackendBundle\\Entity\\Apps', 1 => 'PGZN\\MobileAppBackendBundle\\Entity\\Charities', 2 => 'Application\\Sonata\\UserBundle\\Entity\\User', 3 => 'Application\\Sonata\\UserBundle\\Entity\\Group'));
 
         return $instance;
     }
@@ -4011,9 +4129,9 @@ class appDevDebugProjectContainer extends Container
         $this->services['sonata.admin.pool'] = $instance = new \Sonata\AdminBundle\Admin\Pool($this, 'MobileApp.Backend Admin', 'bundles/sonataadmin/logo_title.png');
 
         $instance->setTemplates(array('user_block' => 'SonataUserBundle:Admin/Core:user_block.html.twig', 'layout' => 'SonataAdminBundle::standard_layout.html.twig', 'ajax' => 'SonataAdminBundle::ajax_layout.html.twig', 'list' => 'SonataAdminBundle:CRUD:list.html.twig', 'show' => 'SonataAdminBundle:CRUD:show.html.twig', 'edit' => 'SonataAdminBundle:CRUD:edit.html.twig', 'dashboard' => 'SonataAdminBundle:Core:dashboard.html.twig', 'preview' => 'SonataAdminBundle:CRUD:preview.html.twig', 'history' => 'SonataAdminBundle:CRUD:history.html.twig', 'history_revision' => 'SonataAdminBundle:CRUD:history_revision.html.twig', 'action' => 'SonataAdminBundle:CRUD:action.html.twig', 'list_block' => 'SonataAdminBundle:Block:block_admin_list.html.twig', 'short_object_description' => 'SonataAdminBundle:Helper:short-object-description.html.twig', 'delete' => 'SonataAdminBundle:CRUD:delete.html.twig', 'batch' => 'SonataAdminBundle:CRUD:list__batch.html.twig', 'batch_confirmation' => 'SonataAdminBundle:CRUD:batch_confirmation.html.twig', 'inner_list_row' => 'SonataAdminBundle:CRUD:list_inner_row.html.twig', 'base_list_field' => 'SonataAdminBundle:CRUD:base_list_field.html.twig'));
-        $instance->setAdminServiceIds(array(0 => 'pgznappsadmin', 1 => 'sonata.user.admin.user', 2 => 'sonata.user.admin.group'));
-        $instance->setAdminGroups(array('Apps' => array('label' => 'Apps', 'label_catalogue' => 'SonataAdminBundle', 'items' => array(0 => 'pgznappsadmin')), 'sonata_user' => array('label' => 'sonata_user', 'label_catalogue' => 'SonataUserBundle', 'items' => array(0 => 'sonata.user.admin.user', 1 => 'sonata.user.admin.group'))));
-        $instance->setAdminClasses(array('PGZN\\MobileAppBackendBundle\\Entity\\Apps' => 'pgznappsadmin', 'Application\\Sonata\\UserBundle\\Entity\\User' => 'sonata.user.admin.user', 'Application\\Sonata\\UserBundle\\Entity\\Group' => 'sonata.user.admin.group'));
+        $instance->setAdminServiceIds(array(0 => 'pgznappsadmin', 1 => 'pgzncharitiesadmin', 2 => 'sonata.user.admin.user', 3 => 'sonata.user.admin.group'));
+        $instance->setAdminGroups(array('Apps' => array('label' => 'Apps', 'label_catalogue' => 'SonataAdminBundle', 'items' => array(0 => 'pgznappsadmin')), 'Charities' => array('label' => 'Charities', 'label_catalogue' => 'SonataAdminBundle', 'items' => array(0 => 'pgzncharitiesadmin')), 'sonata_user' => array('label' => 'sonata_user', 'label_catalogue' => 'SonataUserBundle', 'items' => array(0 => 'sonata.user.admin.user', 1 => 'sonata.user.admin.group'))));
+        $instance->setAdminClasses(array('PGZN\\MobileAppBackendBundle\\Entity\\Apps' => 'pgznappsadmin', 'PGZN\\MobileAppBackendBundle\\Entity\\Charities' => 'pgzncharitiesadmin', 'Application\\Sonata\\UserBundle\\Entity\\User' => 'sonata.user.admin.user', 'Application\\Sonata\\UserBundle\\Entity\\Group' => 'sonata.user.admin.group'));
 
         return $instance;
     }
@@ -4067,7 +4185,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSonata_Admin_RouteLoaderService()
     {
-        return $this->services['sonata.admin.route_loader'] = new \Sonata\AdminBundle\Route\AdminPoolLoader($this->get('sonata.admin.pool'), array(0 => 'pgznappsadmin', 1 => 'sonata.user.admin.user', 2 => 'sonata.user.admin.group'), $this);
+        return $this->services['sonata.admin.route_loader'] = new \Sonata\AdminBundle\Route\AdminPoolLoader($this->get('sonata.admin.pool'), array(0 => 'pgznappsadmin', 1 => 'pgzncharitiesadmin', 2 => 'sonata.user.admin.user', 3 => 'sonata.user.admin.group'), $this);
     }
 
     /**
@@ -5581,6 +5699,32 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'wsse.security.authentication.listener' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return PGZN\MobileAppBackendBundle\Security\Authentication\Firewall\WsseListener A PGZN\MobileAppBackendBundle\Security\Authentication\Firewall\WsseListener instance.
+     */
+    protected function getWsse_Security_Authentication_ListenerService()
+    {
+        return $this->services['wsse.security.authentication.listener'] = new \PGZN\MobileAppBackendBundle\Security\Authentication\Firewall\WsseListener($this->get('security.context'), $this->get('security.authentication.manager'), $this->get('monolog.logger.wsse'));
+    }
+
+    /**
+     * Gets the 'wsse.security.authentication.provider' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return PGZN\MobileAppBackendBundle\Security\Authentication\Provider\WsseProvider A PGZN\MobileAppBackendBundle\Security\Authentication\Provider\WsseProvider instance.
+     */
+    protected function getWsse_Security_Authentication_ProviderService()
+    {
+        return $this->services['wsse.security.authentication.provider'] = new \PGZN\MobileAppBackendBundle\Security\Authentication\Provider\WsseProvider('', 'D:/Projects/MobileApp.Backend/app/cache/dev/security/nonces');
+    }
+
+    /**
      * Gets the database_connection service alias.
      *
      * @return stdClass An instance of the doctrine.dbal.default_connection service
@@ -6000,7 +6144,7 @@ class appDevDebugProjectContainer extends Container
         $b = $this->get('security.user_checker');
         $c = $this->get('security.encoder_factory');
 
-        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($a, $b, 'admin', $c, true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('51b5e4988974b'), 2 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($a, $b, 'main', $c, true), 3 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('51b5e4988974b')), true);
+        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => $this->get('security.authentication.provider.wsse.wsse_secured'), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('51cd6ee10718e'), 2 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($a, $b, 'admin', $c, true), 3 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('51cd6ee10718e'), 4 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($a, $b, 'main', $c, true), 5 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('51cd6ee10718e')), true);
 
         $instance->setEventDispatcher($this->get('event_dispatcher'));
 
@@ -6641,6 +6785,12 @@ class appDevDebugProjectContainer extends Container
             'monolog.handler.fingers_crossed.class' => 'Monolog\\Handler\\FingersCrossedHandler',
             'monolog.handler.fingers_crossed.error_level_activation_strategy.class' => 'Monolog\\Handler\\FingersCrossed\\ErrorLevelActivationStrategy',
             'monolog.handlers_to_channels' => array(
+                'monolog.handler.wsse' => array(
+                    'type' => 'inclusive',
+                    'elements' => array(
+                        0 => 'wsse',
+                    ),
+                ),
                 'monolog.handler.chromephp' => NULL,
                 'monolog.handler.firephp' => NULL,
                 'monolog.handler.main' => NULL,
@@ -6968,8 +7118,9 @@ class appDevDebugProjectContainer extends Container
             ),
             'simplethings.entityaudit.audited_entities' => array(
                 0 => 'PGZN\\MobileAppBackendBundle\\Entity\\Apps',
-                1 => 'Application\\Sonata\\UserBundle\\Entity\\User',
-                2 => 'Application\\Sonata\\UserBundle\\Entity\\Group',
+                1 => 'PGZN\\MobileAppBackendBundle\\Entity\\Charities',
+                2 => 'Application\\Sonata\\UserBundle\\Entity\\User',
+                3 => 'Application\\Sonata\\UserBundle\\Entity\\Group',
             ),
             'simplethings.entityaudit.table_prefix' => '',
             'simplethings.entityaudit.table_suffix' => '_audit',

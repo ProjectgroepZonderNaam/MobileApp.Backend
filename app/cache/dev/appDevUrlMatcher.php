@@ -172,50 +172,101 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
                 }
 
-                if (0 === strpos($pathinfo, '/admin/pgzn/mobileappbackend/apps')) {
-                    // admin_pgzn_mobileappbackend_apps_list
-                    if ($pathinfo === '/admin/pgzn/mobileappbackend/apps/list') {
-                        return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::listAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_list',  '_route' => 'admin_pgzn_mobileappbackend_apps_list',);
+                if (0 === strpos($pathinfo, '/admin/pgzn/mobileappbackend')) {
+                    if (0 === strpos($pathinfo, '/admin/pgzn/mobileappbackend/apps')) {
+                        // admin_pgzn_mobileappbackend_apps_list
+                        if ($pathinfo === '/admin/pgzn/mobileappbackend/apps/list') {
+                            return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::listAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_list',  '_route' => 'admin_pgzn_mobileappbackend_apps_list',);
+                        }
+
+                        // admin_pgzn_mobileappbackend_apps_create
+                        if ($pathinfo === '/admin/pgzn/mobileappbackend/apps/create') {
+                            return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::createAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_create',  '_route' => 'admin_pgzn_mobileappbackend_apps_create',);
+                        }
+
+                        // admin_pgzn_mobileappbackend_apps_batch
+                        if ($pathinfo === '/admin/pgzn/mobileappbackend/apps/batch') {
+                            return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::batchAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_batch',  '_route' => 'admin_pgzn_mobileappbackend_apps_batch',);
+                        }
+
+                        // admin_pgzn_mobileappbackend_apps_edit
+                        if (preg_match('#^/admin/pgzn/mobileappbackend/apps/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
+                            return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_pgzn_mobileappbackend_apps_edit')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::editAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_edit',));
+                        }
+
+                        // admin_pgzn_mobileappbackend_apps_delete
+                        if (preg_match('#^/admin/pgzn/mobileappbackend/apps/(?P<id>[^/]++)/delete$#s', $pathinfo, $matches)) {
+                            return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_pgzn_mobileappbackend_apps_delete')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::deleteAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_delete',));
+                        }
+
+                        // admin_pgzn_mobileappbackend_apps_show
+                        if (preg_match('#^/admin/pgzn/mobileappbackend/apps/(?P<id>[^/]++)/show$#s', $pathinfo, $matches)) {
+                            return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_pgzn_mobileappbackend_apps_show')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::showAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_show',));
+                        }
+
+                        // admin_pgzn_mobileappbackend_apps_export
+                        if ($pathinfo === '/admin/pgzn/mobileappbackend/apps/export') {
+                            return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::exportAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_export',  '_route' => 'admin_pgzn_mobileappbackend_apps_export',);
+                        }
+
+                        // admin_pgzn_mobileappbackend_apps_history
+                        if (preg_match('#^/admin/pgzn/mobileappbackend/apps/(?P<id>[^/]++)/history$#s', $pathinfo, $matches)) {
+                            return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_pgzn_mobileappbackend_apps_history')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::historyAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_history',));
+                        }
+
+                        // admin_pgzn_mobileappbackend_apps_history_view_revision
+                        if (preg_match('#^/admin/pgzn/mobileappbackend/apps/(?P<id>[^/]++)/history/(?P<revision>[^/]++)/view$#s', $pathinfo, $matches)) {
+                            return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_pgzn_mobileappbackend_apps_history_view_revision')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::historyViewRevisionAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_history_view_revision',));
+                        }
+
                     }
 
-                    // admin_pgzn_mobileappbackend_apps_create
-                    if ($pathinfo === '/admin/pgzn/mobileappbackend/apps/create') {
-                        return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::createAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_create',  '_route' => 'admin_pgzn_mobileappbackend_apps_create',);
-                    }
+                    if (0 === strpos($pathinfo, '/admin/pgzn/mobileappbackend/charities')) {
+                        // admin_pgzn_mobileappbackend_charities_list
+                        if ($pathinfo === '/admin/pgzn/mobileappbackend/charities/list') {
+                            return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::listAction',  '_sonata_admin' => 'pgzncharitiesadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_charities_list',  '_route' => 'admin_pgzn_mobileappbackend_charities_list',);
+                        }
 
-                    // admin_pgzn_mobileappbackend_apps_batch
-                    if ($pathinfo === '/admin/pgzn/mobileappbackend/apps/batch') {
-                        return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::batchAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_batch',  '_route' => 'admin_pgzn_mobileappbackend_apps_batch',);
-                    }
+                        // admin_pgzn_mobileappbackend_charities_create
+                        if ($pathinfo === '/admin/pgzn/mobileappbackend/charities/create') {
+                            return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::createAction',  '_sonata_admin' => 'pgzncharitiesadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_charities_create',  '_route' => 'admin_pgzn_mobileappbackend_charities_create',);
+                        }
 
-                    // admin_pgzn_mobileappbackend_apps_edit
-                    if (preg_match('#^/admin/pgzn/mobileappbackend/apps/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
-                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_pgzn_mobileappbackend_apps_edit')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::editAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_edit',));
-                    }
+                        // admin_pgzn_mobileappbackend_charities_batch
+                        if ($pathinfo === '/admin/pgzn/mobileappbackend/charities/batch') {
+                            return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::batchAction',  '_sonata_admin' => 'pgzncharitiesadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_charities_batch',  '_route' => 'admin_pgzn_mobileappbackend_charities_batch',);
+                        }
 
-                    // admin_pgzn_mobileappbackend_apps_delete
-                    if (preg_match('#^/admin/pgzn/mobileappbackend/apps/(?P<id>[^/]++)/delete$#s', $pathinfo, $matches)) {
-                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_pgzn_mobileappbackend_apps_delete')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::deleteAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_delete',));
-                    }
+                        // admin_pgzn_mobileappbackend_charities_edit
+                        if (preg_match('#^/admin/pgzn/mobileappbackend/charities/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
+                            return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_pgzn_mobileappbackend_charities_edit')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::editAction',  '_sonata_admin' => 'pgzncharitiesadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_charities_edit',));
+                        }
 
-                    // admin_pgzn_mobileappbackend_apps_show
-                    if (preg_match('#^/admin/pgzn/mobileappbackend/apps/(?P<id>[^/]++)/show$#s', $pathinfo, $matches)) {
-                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_pgzn_mobileappbackend_apps_show')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::showAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_show',));
-                    }
+                        // admin_pgzn_mobileappbackend_charities_delete
+                        if (preg_match('#^/admin/pgzn/mobileappbackend/charities/(?P<id>[^/]++)/delete$#s', $pathinfo, $matches)) {
+                            return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_pgzn_mobileappbackend_charities_delete')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::deleteAction',  '_sonata_admin' => 'pgzncharitiesadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_charities_delete',));
+                        }
 
-                    // admin_pgzn_mobileappbackend_apps_export
-                    if ($pathinfo === '/admin/pgzn/mobileappbackend/apps/export') {
-                        return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::exportAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_export',  '_route' => 'admin_pgzn_mobileappbackend_apps_export',);
-                    }
+                        // admin_pgzn_mobileappbackend_charities_show
+                        if (preg_match('#^/admin/pgzn/mobileappbackend/charities/(?P<id>[^/]++)/show$#s', $pathinfo, $matches)) {
+                            return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_pgzn_mobileappbackend_charities_show')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::showAction',  '_sonata_admin' => 'pgzncharitiesadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_charities_show',));
+                        }
 
-                    // admin_pgzn_mobileappbackend_apps_history
-                    if (preg_match('#^/admin/pgzn/mobileappbackend/apps/(?P<id>[^/]++)/history$#s', $pathinfo, $matches)) {
-                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_pgzn_mobileappbackend_apps_history')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::historyAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_history',));
-                    }
+                        // admin_pgzn_mobileappbackend_charities_export
+                        if ($pathinfo === '/admin/pgzn/mobileappbackend/charities/export') {
+                            return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::exportAction',  '_sonata_admin' => 'pgzncharitiesadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_charities_export',  '_route' => 'admin_pgzn_mobileappbackend_charities_export',);
+                        }
 
-                    // admin_pgzn_mobileappbackend_apps_history_view_revision
-                    if (preg_match('#^/admin/pgzn/mobileappbackend/apps/(?P<id>[^/]++)/history/(?P<revision>[^/]++)/view$#s', $pathinfo, $matches)) {
-                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_pgzn_mobileappbackend_apps_history_view_revision')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::historyViewRevisionAction',  '_sonata_admin' => 'pgznappsadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_apps_history_view_revision',));
+                        // admin_pgzn_mobileappbackend_charities_history
+                        if (preg_match('#^/admin/pgzn/mobileappbackend/charities/(?P<id>[^/]++)/history$#s', $pathinfo, $matches)) {
+                            return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_pgzn_mobileappbackend_charities_history')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::historyAction',  '_sonata_admin' => 'pgzncharitiesadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_charities_history',));
+                        }
+
+                        // admin_pgzn_mobileappbackend_charities_history_view_revision
+                        if (preg_match('#^/admin/pgzn/mobileappbackend/charities/(?P<id>[^/]++)/history/(?P<revision>[^/]++)/view$#s', $pathinfo, $matches)) {
+                            return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_pgzn_mobileappbackend_charities_history_view_revision')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::historyViewRevisionAction',  '_sonata_admin' => 'pgzncharitiesadmin',  '_sonata_name' => 'admin_pgzn_mobileappbackend_charities_history_view_revision',));
+                        }
+
                     }
 
                 }
@@ -342,16 +393,30 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
             }
 
-            // get_apps
-            if (0 === strpos($pathinfo, '/apps') && preg_match('#^/apps(?:\\.(?P<_format>json|html))?$#s', $pathinfo, $matches)) {
-                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                    $allow = array_merge($allow, array('GET', 'HEAD'));
-                    goto not_get_apps;
-                }
+            if (0 === strpos($pathinfo, '/api')) {
+                // get_apps
+                if (0 === strpos($pathinfo, '/api/apps') && preg_match('#^/api/apps(?:\\.(?P<_format>json|html))?$#s', $pathinfo, $matches)) {
+                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                        $allow = array_merge($allow, array('GET', 'HEAD'));
+                        goto not_get_apps;
+                    }
 
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'get_apps')), array (  '_controller' => 'PGZN\\MobileAppBackendBundle\\Controller\\AppController::getAppsAction',  '_format' => NULL,));
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'get_apps')), array (  '_controller' => 'PGZN\\MobileAppBackendBundle\\Controller\\AppController::getAppsAction',  '_format' => NULL,));
+                }
+                not_get_apps:
+
+                // get_charities
+                if (0 === strpos($pathinfo, '/api/charities') && preg_match('#^/api/charities(?:\\.(?P<_format>json|html))?$#s', $pathinfo, $matches)) {
+                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                        $allow = array_merge($allow, array('GET', 'HEAD'));
+                        goto not_get_charities;
+                    }
+
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'get_charities')), array (  '_controller' => 'PGZN\\MobileAppBackendBundle\\Controller\\CharitiesController::getCharitiesAction',  '_format' => NULL,));
+                }
+                not_get_charities:
+
             }
-            not_get_apps:
 
         }
 
